@@ -47,15 +47,16 @@ typedef struct {
 #define MB_SIZE      8
 
 typedef struct {
-    osMessageQueueId_t   id;
-    osMessageQueueAttr_t attr;
-    char                 queue[MB_SIZE * (sizeof(void*) + sizeof(os_message_t))];
-    os_message_queue_t   data;
+    sys_sem_t   post_sem;
+    sys_sem_t   fetch_sem;
+    uint8_t     post_idx;
+    uint8_t     fetch_idx;
+    void*       queue[MB_SIZE];
 } sys_mbox_t;
 
 #define SYS_MBOX_NULL               ((uint32_t) NULL)
-#define sys_mbox_valid(x)           (((*x).id == NULL) ? 0 : 1 )
-#define sys_mbox_set_invalid(x)     ( (*x).id = NULL )
+#define sys_mbox_valid(x)           sys_sem_valid(&(*x).post_sem)
+#define sys_mbox_set_invalid(x)     sys_sem_set_invalid(&(*x).fetch_sem)
 
 #if ((DEFAULT_RAW_RECVMBOX_SIZE) > (MB_SIZE)) || \
     ((DEFAULT_UDP_RECVMBOX_SIZE) > (MB_SIZE)) || \

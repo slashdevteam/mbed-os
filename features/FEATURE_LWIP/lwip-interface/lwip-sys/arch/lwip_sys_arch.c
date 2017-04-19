@@ -124,15 +124,19 @@ u32_t sys_now(void) {
 err_t sys_mbox_new(sys_mbox_t *mbox, int queue_sz) {
     if (queue_sz > MB_SIZE)
         error("sys_mbox_new size error\n");
-    
+
+    err_t err = sys_sem_new(&mbox->post_sem, queue_sz);
+    if (err != ERR_OK)
+        return err;
+
+    err = sys_sem_new(&mbox->fetch_sem, 0);
+    if (err != ERR_OK)
+        return err;
+
+    mbox->post_idx = 0;
+    mbox->fetch_idx = 0;
     memset(mbox->queue, 0, sizeof(mbox->queue));
-    memset(&mbox->data, 0, sizeof(mbox->data));
-    mbox->attr.mq_mem = mbox->queue;
-    mbox->attr.mq_size = sizeof(mbox->queue);
-    mbox->attr.cb_mem = &mbox->data;
-    mbox->attr.cb_size = sizeof(mbox->data);
-    mbox->id = osMessageQueueNew(queue_sz, sizeof(void *), &mbox->attr);
-    return (mbox->id == NULL) ? (ERR_MEM) : (ERR_OK);
+    return ERR_OK;
 }
 
 /*---------------------------------------------------------------------------*
@@ -146,8 +150,11 @@ err_t sys_mbox_new(sys_mbox_t *mbox, int queue_sz) {
  *      sys_mbox_t *mbox         -- Handle of mailbox
  *---------------------------------------------------------------------------*/
 void sys_mbox_free(sys_mbox_t *mbox) {
-    if (osMessageQueueGetCount(mbox->id) != 0)
+    if (mbox->post_idx != mbox->fetch_idx)
         error("sys_mbox_free error\n");
+
+    sys_sem_free(&mbox->post_sem);
+    sys_sem_free(&mbox->fetch_sem);
 }
 
 /*---------------------------------------------------------------------------*
@@ -160,8 +167,14 @@ void sys_mbox_free(sys_mbox_t *mbox) {
  *      void *msg              -- Pointer to data to post
  *---------------------------------------------------------------------------*/
 void sys_mbox_post(sys_mbox_t *mbox, void *msg) {
-    if (osMessageQueuePut(mbox->id, &msg, 0, osWaitForever) != osOK)
-        error("sys_mbox_post error\n");
+    sys_sem_wait(&mbox->post_sem);
+
+    core_util_critical_section_enter();
+    mbox->queue[mbox->post_idx % MB_SIZE] = msg;
+    mbox->post_idx += 1;
+    core_util_critical_section_exit();
+
+    sys_sem_signal(&mbox->fetch_sem);
 }
 
 /*---------------------------------------------------------------------------*
@@ -178,8 +191,16 @@ void sys_mbox_post(sys_mbox_t *mbox, void *msg) {
  *                                  if not.
  *---------------------------------------------------------------------------*/
 err_t sys_mbox_trypost(sys_mbox_t *mbox, void *msg) {
-    osStatus_t status = osMessageQueuePut(mbox->id, &msg, 0, 0);
-    return (status == osOK) ? (ERR_OK) : (ERR_MEM);
+    u32_t res = sys_arch_sem_wait(&mbox->post_sem, 1);
+    if (res == SYS_ARCH_TIMEOUT)
+        return ERR_MEM;
+
+    core_util_critical_section_enter();
+    mbox->queue[mbox->post_idx % MB_SIZE] = msg;
+    mbox->post_idx += 1;
+    core_util_critical_section_exit();
+
+    sys_sem_signal(&mbox->fetch_sem);
 }
 
 /*---------------------------------------------------------------------------*
@@ -208,13 +229,18 @@ err_t sys_mbox_trypost(sys_mbox_t *mbox, void *msg) {
  *                                  of milliseconds until received.
  *---------------------------------------------------------------------------*/
 u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout) {
-    u32_t start = us_ticker_read();
-    
-    osStatus_t res = osMessageQueueGet(mbox->id, msg, NULL, (timeout != 0)?(timeout):(osWaitForever));
-    if (res != osOK)
+    u32_t res = sys_arch_sem_wait(&mbox->fetch_sem, timeout);
+    if (res == SYS_ARCH_TIMEOUT)
         return SYS_ARCH_TIMEOUT;
 
-    return (us_ticker_read() - start) / 1000;
+    core_util_critical_section_enter();
+    if (msg)
+        *msg = mbox->queue[mbox->fetch_idx % MB_SIZE];
+    mbox->fetch_idx += 1;
+    core_util_critical_section_exit();
+
+    sys_sem_signal(&mbox->post_sem);
+    return res;
 }
 
 /*---------------------------------------------------------------------------*
@@ -232,10 +258,17 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout) {
  *                                  return ERR_OK.
  *---------------------------------------------------------------------------*/
 u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg) {
-    osStatus_t res = osMessageQueueGet(mbox->id, msg, NULL, 0);
-    if (res != osOK)
+    u32_t res = sys_arch_sem_wait(&mbox->fetch_sem, 1);
+    if (res == SYS_ARCH_TIMEOUT)
         return SYS_MBOX_EMPTY;
 
+    core_util_critical_section_enter();
+    if (msg)
+        *msg = mbox->queue[mbox->fetch_idx % MB_SIZE];
+    mbox->fetch_idx += 1;
+    core_util_critical_section_exit();
+
+    sys_sem_signal(&mbox->post_sem);
     return ERR_OK;
 }
 
