@@ -29,45 +29,6 @@
  */
 
 #include "fsl_common.h"
-/* This is not needed for mbed */
-#if 0
-#include "fsl_debug_console.h"
-
-#ifndef NDEBUG
-#if (defined(__CC_ARM)) || (defined(__ICCARM__))
-void __aeabi_assert(const char *failedExpr, const char *file, int line)
-{
-    PRINTF("ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" \n", failedExpr, file, line);
-    for (;;)
-    {
-        __BKPT(0);
-    }
-}
-#elif(defined(__REDLIB__))
-
-#if SDK_DEBUGCONSOLE
-void __assertion_failed(char *_Expr)
-{
-    PRINTF("%s\n", _Expr);
-    for (;;)
-    {
-        __asm("bkpt #0");
-    }
-}
-#endif
-
-#elif(defined(__GNUC__))
-void __assert_func(const char *file, int line, const char *func, const char *failedExpr)
-{
-    PRINTF("ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" function name \"%s\" \n", failedExpr, file, line, func);
-    for (;;)
-    {
-        __BKPT(0);
-    }
-}
-#endif /* (defined(__CC_ARM)) ||  (defined (__ICCARM__)) */
-#endif /* NDEBUG */
-#endif /* This was not needed for mbed */
 
 #ifndef __GIC_PRIO_BITS
 uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler)

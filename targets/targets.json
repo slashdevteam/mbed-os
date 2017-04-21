@@ -2845,5 +2845,18 @@
     "SARA_NBIOT_EVK": {
         "inherits": ["SARA_NBIOT"],
         "extra_labels": ["ublox", "HI2110", "SARA_NBIOT"]
+    },
+    "WUNDERBAR": {
+        "core": "Cortex-M4F",
+        "supported_toolchains": ["GCC_ARM"],
+        "extra_labels": ["Freescale", "MCUXpresso_MCUS", "KSDK2_MCUS", "MCU_K24F"],
+        "is_disk_virtual": true,
+        "macros": ["CPU_MK24FN1M0VDC12", "FSL_RTOS_MBED", "TARGET_K24F", "MBEDTLS_ENTROPY_HARDWARE_ALT"],
+        "inherits": ["Target"],
+        "detect_code": ["0244"],
+        "device_has": ["ANALOGIN", "ANALOGOUT", "ERROR_RED", "I2C", "I2CSLAVE", "INTERRUPTIN", "LOWPOWERTIMER", "PORTIN", "PORTINOUT", "PORTOUT", "PWMOUT", "RTC", "SERIAL", "SERIAL_FC", "SERIAL_ASYNCH", "SLEEP", "SPI", "SPI_ASYNCH", "SPISLAVE", "STDIO_MESSAGES", "STORAGE"],
+        "features": ["STORAGE"],
+        "release_versions": ["2", "5"],
+        "device_name": "MK24FN1M0xxx12"
     }
 }
