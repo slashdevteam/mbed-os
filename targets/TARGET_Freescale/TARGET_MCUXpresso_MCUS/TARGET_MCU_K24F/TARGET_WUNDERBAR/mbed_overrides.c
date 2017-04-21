@@ -40,3 +40,25 @@ void NMI_Handler(void)
     gpio_t gpio;
     gpio_init_in(&gpio, PTA4);
 }
+
+void resetWifi()
+{
+    {
+        gpio_t gsPD;
+        gpio_init_in(&gsPD, PTD5);
+        while(!gpio_read(&gsPD))
+        {};
+    }
+
+    {
+        gpio_t gsPD;
+        gpio_init_out(&gsPD, PTD5);
+        gpio_write(&gsPD, 0);
+    }
+
+    {
+        gpio_t gsPD;
+        gpio_init_in(&gsPD, PTD5);
+        wait(1);
+    }
+}
