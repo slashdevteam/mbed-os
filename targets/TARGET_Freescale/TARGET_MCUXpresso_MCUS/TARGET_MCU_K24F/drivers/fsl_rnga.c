@@ -51,7 +51,9 @@
  */
 /*@{*/
 #define RNG_CR_REG(base) ((base)->CR)
+#define RNG_SR_REG(base) ((base)->SR)
 #define RNG_RD_CR(base) (RNG_CR_REG(base))
+#define RNG_RD_SR(base) (RNG_SR_REG(base))
 #define RNG_WR_CR(base, value) (RNG_CR_REG(base) = (value))
 #define RNG_RMW_CR(base, mask, value) (RNG_WR_CR(base, (RNG_RD_CR(base) & ~(mask)) | (value)))
 /*@}*/
@@ -74,7 +76,8 @@
 /*! @brief Set the GO field to a new value. */
 #define RNG_WR_CR_GO(base, value) (RNG_RMW_CR(base, RNG_CR_GO_MASK, RNG_CR_GO(value)))
 /*@}*/
-
+#define RNG_WR_CR_HA(base, value) (RNG_RMW_CR(base, RNG_CR_HA_MASK, RNG_CR_HA(value)))
+#define RNG_RD_SR_SECV(base) ((RNG_SR_REG(base) & RNG_SR_SECV_MASK) >> RNG_SR_SECV_SHIFT)
 /*!
  * @name Register RNG_CR, field SLP[4] (RW)
  *
@@ -209,7 +212,7 @@ void RNGA_Deinit(RNG_Type *base)
  *
  * @param base RNGA base address
  */
-static uint32_t rnga_ReadEntropy(RNG_Type *base)
+uint32_t rnga_ReadEntropy(RNG_Type *base)
 {
     uint32_t data = 0;
     if (RNGA_GetMode(base) == kRNGA_ModeNormal) /* Is in normal mode.*/
@@ -282,6 +285,11 @@ void RNGA_Seed(RNG_Type *base, uint32_t seed)
 {
     /* Write to RNGA Entropy Register.*/
     RNG_WR_ER(base, seed);
+}
+
+uint32_t RNGA_GetSecurityViolation(RNG_Type *base)
+{
+    return RNG_RD_SR_SECV(base);
 }
 
 #endif /* FSL_FEATURE_SOC_RNG_COUNT */

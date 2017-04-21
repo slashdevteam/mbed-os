@@ -127,6 +127,11 @@ void RNGA_SetMode(RNG_Type *base, rnga_mode_t mode);
  */
 rnga_mode_t RNGA_GetMode(RNG_Type *base);
 
+/* Making externally visible for MBED TLS */
+uint32_t rnga_ReadEntropy(RNG_Type *base);
+
+uint32_t RNGA_GetSecurityViolation(RNG_Type *base);
+
 #if defined(__cplusplus)
 }
 #endif

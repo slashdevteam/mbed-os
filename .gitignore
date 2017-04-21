@@ -86,3 +86,6 @@ tags
 
 # Visual Studio Code
 .vscode/
+
+# OSX
+*.DS_Store

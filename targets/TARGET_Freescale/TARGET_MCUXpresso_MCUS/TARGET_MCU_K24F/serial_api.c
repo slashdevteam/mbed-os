@@ -1,5 +1,4 @@
 /* mbed Microcontroller Library
- * Copyright (c) 2006-2017 ARM Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +56,7 @@ void serial_init(serial_t *obj, PinName tx, PinName rx)
     uart_config_t config;
 
     UART_GetDefaultConfig(&config);
-    config.baudRate_Bps = 9600;
+    config.baudRate_Bps = 115200;
     config.enableTx = false;
     config.enableRx = false;
 
@@ -151,7 +150,8 @@ static inline void uart_irq(uint32_t transmit_empty, uint32_t receive_full, uint
 void uart0_irq()
 {
     uint32_t status_flags = UART0->S1;
-    uart_irq((status_flags & kUART_TxDataRegEmptyFlag), (status_flags & kUART_RxDataRegFullFlag), 0);
+    // uart_irq((status_flags & kUART_TxDataRegEmptyFlag), (status_flags & kUART_RxDataRegFullFlag), 0);
+    uart_irq((status_flags & UART_S1_TDRE_MASK), (status_flags & UART_S1_RDRF_MASK), 0);
 }
 
 void uart1_irq()
