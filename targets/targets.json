@@ -2857,6 +2857,7 @@
         "device_has": ["ANALOGIN", "ANALOGOUT", "ERROR_RED", "I2C", "I2CSLAVE", "INTERRUPTIN", "LOWPOWERTIMER", "PORTIN", "PORTINOUT", "PORTOUT", "PWMOUT", "RTC", "SERIAL", "SERIAL_FC", "SERIAL_ASYNCH", "SLEEP", "SPI", "SPI_ASYNCH", "SPISLAVE", "STDIO_MESSAGES", "STORAGE"],
         "features": ["STORAGE"],
         "release_versions": ["2", "5"],
+        "OUTPUT_EXT": "hex",
         "device_name": "MK24FN1M0xxx12"
     }
 }
