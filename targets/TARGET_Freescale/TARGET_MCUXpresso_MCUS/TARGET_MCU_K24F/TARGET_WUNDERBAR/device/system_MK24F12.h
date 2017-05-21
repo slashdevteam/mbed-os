@@ -113,7 +113,7 @@ extern "C" {
 
 /* Define clock source values */
 
-#define CPU_XTAL_CLK_HZ                50000000u           /* Value of the external crystal or oscillator clock frequency in Hz */
+#define CPU_XTAL_CLK_HZ                12000000U           /* Value of the external crystal or oscillator clock frequency in Hz */
 #define CPU_XTAL32k_CLK_HZ             32768u              /* Value of the external 32k crystal or oscillator clock frequency in Hz */
 #define CPU_INT_SLOW_CLK_HZ            32768u              /* Value of the slow internal oscillator clock frequency in Hz  */
 #define CPU_INT_FAST_CLK_HZ            4000000u            /* Value of the fast internal oscillator clock frequency in Hz  */
@@ -127,7 +127,7 @@ extern "C" {
 /* SMC_PMPROT: AVLP=1,ALLS=1,AVLLS=1 */
 #define SYSTEM_SMC_PMPROT_VALUE        0x2AU               /* SMC_PMPROT */
 
-#define DEFAULT_SYSTEM_CLOCK           20971520u           /* Default System clock value */
+#define DEFAULT_SYSTEM_CLOCK           120000000U           /* Default System clock value */
 
 
 /**

@@ -206,8 +206,9 @@ typedef enum {
     SW3 = PTA10,
 
     // USB Pins
-    USBTX = PTE24,
-    USBRX = PTC14,
+    USBTX = PTD7,
+    USBRX = PTD6,
+
 
     WIFIPD = PTD5,
 

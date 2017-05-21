@@ -90,7 +90,7 @@ const clock_config_t g_defaultClockConfigVlpr = {
     .coreClock = 4000000U, /* Core clock frequency */
 };
 
-/* Configuration for enter RUN mode. Core clock = 80MHz. */
+/* Configuration for enter RUN mode. Core clock = 120MHz. */
 const clock_config_t g_defaultClockConfigRun = {
     .mcgConfig =
         {
@@ -98,7 +98,6 @@ const clock_config_t g_defaultClockConfigRun = {
             .irclkEnableMode = kMCG_IrclkEnable, /* MCGIRCLK enable. */
             .ircs = kMCG_IrcSlow,                /* Select IRC32k.*/
             .fcrdiv = 0U,                        /* FCRDIV is 0. */
-
             .frdiv = 3U,
             .drs = kMCG_DrsLow,         /* Low frequency range. */
             .dmx32 = kMCG_Dmx32Default, /* DCO has a default range of 25%. */
@@ -106,14 +105,14 @@ const clock_config_t g_defaultClockConfigRun = {
 
             .pll0Config =
                 {
-                    .enableMode = 0U, .prdiv = 0x3U, .vdiv = 0x10U,
+                    .enableMode = 0U, .prdiv = 0x2U, .vdiv = 0x6U,
                 },
         },
     .simConfig =
         {
             .pllFllSel = 1U,        /* PLLFLLSEL select PLL. */
             .er32kSrc = 2U,         /* ERCLK32K selection, use RTC. */
-            .clkdiv1 = 0x01230000U, /* SIM_CLKDIV1. */
+            .clkdiv1 = 0x01240000U, /* SIM_CLKDIV1. */
         },
     .oscConfig = {.freq = BOARD_XTAL0_CLK_HZ,
                   .capLoad = 0,
@@ -125,7 +124,7 @@ const clock_config_t g_defaultClockConfigRun = {
                           .erclkDiv = 0U,
 #endif
                       }},
-    .coreClock = 80000000U, /* Core clock frequency */
+    .coreClock = 120000000U, /* Core clock frequency */
 };
 
 /* Configuration for HSRUN mode. Core clock = 120MHz. */
@@ -144,14 +143,14 @@ const clock_config_t g_defaultClockConfigHsrun = {
 
             .pll0Config =
                 {
-                    .enableMode = 0U, .prdiv = 0x1U, .vdiv = 0x6U,
+                    .enableMode = 0U, .prdiv = 0x2U, .vdiv = 0x6U,
                 },
         },
     .simConfig =
         {
             .pllFllSel = 1U,        /* PLLFLLSEL select PLL. */
             .er32kSrc = 2U,         /* ERCLK32K selection, use RTC. */
-            .clkdiv1 = 0x01340000U, /* SIM_CLKDIV1. */
+            .clkdiv1 = 0x01240000U, /* SIM_CLKDIV1. */
         },
     .oscConfig = {.freq = BOARD_XTAL0_CLK_HZ,
                   .capLoad = 0,
@@ -197,6 +196,11 @@ const clock_config_t g_defaultClockConfigHsrun = {
  * 4. Call CLOCK_SetSimConfig to set the clock configuration in SIM.
  */
 
+void CLOCK_CONFIG_SetFllExtRefDiv(uint8_t frdiv)
+{
+    MCG->C1 = ((MCG->C1 & ~MCG_C1_FRDIV_MASK) | MCG_C1_FRDIV(frdiv));
+}
+
 void BOARD_BootClockVLPR(void)
 {
     CLOCK_SetSimSafeDivs();
@@ -222,14 +226,16 @@ void BOARD_BootClockRUN(void)
     CLOCK_InitOsc0(&g_defaultClockConfigRun.oscConfig);
     CLOCK_SetXtal0Freq(BOARD_XTAL0_CLK_HZ);
 
-    CLOCK_BootToPeeMode(g_defaultClockConfigRun.mcgConfig.oscsel, kMCG_PllClkSelPll0,
+    CLOCK_SetInternalRefClkConfig(g_defaultClockConfigRun.mcgConfig.irclkEnableMode,
+                                  g_defaultClockConfigRun.mcgConfig.ircs,
+                                  g_defaultClockConfigRun.mcgConfig.fcrdiv);
+    CLOCK_CONFIG_SetFllExtRefDiv(g_defaultClockConfigRun.mcgConfig.frdiv);
+
+    CLOCK_BootToPeeMode(g_defaultClockConfigRun.mcgConfig.oscsel,
+                        kMCG_PllClkSelPll0,
                         &g_defaultClockConfigRun.mcgConfig.pll0Config);
 
-    CLOCK_SetInternalRefClkConfig(g_defaultClockConfigRun.mcgConfig.irclkEnableMode,
-                                  g_defaultClockConfigRun.mcgConfig.ircs, g_defaultClockConfigRun.mcgConfig.fcrdiv);
-
     CLOCK_SetSimConfig(&g_defaultClockConfigRun.simConfig);
-
     SystemCoreClock = g_defaultClockConfigRun.coreClock;
 }
 
