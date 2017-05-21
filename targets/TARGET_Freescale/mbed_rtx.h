@@ -111,11 +111,8 @@
 
 #ifndef INITIAL_SP
 #define INITIAL_SP              (0x20030000UL)
-#endif
 
-#endif
-
-#elif defined(TARGET_K24F)
+#elif defined(TARGET_WUNDERBAR)
 
 #ifndef INITIAL_SP
 #define INITIAL_SP              (0x20030000UL)
