@@ -22,7 +22,6 @@
 void mbed_sdk_init()
 {
     BOARD_BootClockRUN();
-    // pin_function(PTA2, 1);          //By default the GREEN LED is enabled. This disables it
 }
 
 // Enable the RTC oscillator if available on the board
