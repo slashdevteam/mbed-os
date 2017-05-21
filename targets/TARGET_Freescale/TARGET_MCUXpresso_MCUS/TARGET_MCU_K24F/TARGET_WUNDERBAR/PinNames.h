@@ -192,58 +192,28 @@ typedef enum {
     PTE31 = (4 << GPIO_PORT_SHIFT | 31),
 
     LED_RED   = PTA29,
-    // LED_GREEN = PTA2,
-    // LED_BLUE  = PTD5,
 
     // mbed original LED naming
     LED1 = LED_RED,
-    // LED2 = LED_GREEN,
-    // LED3 = LED_BLUE,
-    // LED4 = LED_RED,
 
     //Push buttons
     SW2 = PTD8,
     SW3 = PTA10,
 
     // USB Pins
-    USBTX = PTD7,
-    USBRX = PTD6,
-
+    WIFI_TX = PTD7,
+    WIFI_RX = PTD6,
 
     WIFIPD = PTD5,
-
-    // Arduino Headers
-    // D0 = PTC16,
-    // D1 = PTC17,
-    // D2 = PTB9,
-    // D3 = PTA1,
-    // D4 = PTB23,
-    // D5 = PTA2,
-    // D6 = PTC2,
-    // D7 = PTC3,
-    // D8 = PTC12,
-    // D9 = PTC4,
-    // D10 = PTD0,
-    // D11 = PTD2,
-    // D12 = PTD3,
-    // D13 = PTD1,
-    // D14 = PTE25,
-    // D15 = PTE24,
-
-    // I2C_SCL = D15,
-    // I2C_SDA = D14,
-
-    // A0 = PTB2,
-    // A1 = PTB3,
-    // A2 = PTB10,
-    // A3 = PTB11,
-    // A4 = PTC11,
-    // A5 = PTC10,
 
     DAC0_OUT = 0xFEFE, /* DAC does not have Pin Name in RM */
 
     // Not connected
-    NC = (int)0xFFFFFFFF
+    NC = (int)0xFFFFFFFF,
+
+    // Wunderbar _does not_ have STDIO UART! Use USB CDC instead
+    USBTX = NC,
+    USBRX = NC
 } PinName;
 
 

@@ -34,9 +34,9 @@ typedef enum {
     UART_4 = 4,
 } UARTName;
 
-#define STDIO_UART_TX     USBTX
-#define STDIO_UART_RX     USBRX
-#define STDIO_UART        UART_0
+#define STDIO_UART_TX     NC
+#define STDIO_UART_RX     NC
+#define STDIO_UART        UART_4
 
 typedef enum {
     I2C_0 = 0,
