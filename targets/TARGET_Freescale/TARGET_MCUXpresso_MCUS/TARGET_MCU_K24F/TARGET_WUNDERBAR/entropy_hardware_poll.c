@@ -57,7 +57,7 @@ int mbedtls_hardware_poll( void *data,
     int ret = 0;
     ((void) data);
 
-    RNGA_Init(RNG, 1); // 1 for highAssurance
+    RNGA_Init(RNG); // 1 for highAssurance
     // get seed from PIT
     // int32_t seed = PIT_GetCurrentTimerCount(PIT, kPIT_Chnl_0);
     // RNGA_Seed(RNG, seed);
