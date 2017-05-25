@@ -22,6 +22,12 @@
 
 #include "objects.h"
 
-void resetWifi();
+#ifdef __cplusplus
+extern "C" {
+#endif
+    extern void resetWifi();
+#ifdef __cplusplus
+}
+#endif
 
 #endif
