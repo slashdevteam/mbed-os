@@ -198,7 +198,6 @@ typedef enum {
 
     //Push buttons
     SW2 = PTD8,
-    SW3 = PTA10,
 
     // USB Pins
     WIFI_TX = PTD7,
