@@ -58,6 +58,6 @@ void resetWifi()
     {
         gpio_t gsPD;
         gpio_init_in(&gsPD, PTD5);
-        wait(1);
+        wait(.3);
     }
 }
