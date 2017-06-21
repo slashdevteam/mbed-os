@@ -207,6 +207,17 @@ typedef enum {
 
     DAC0_OUT = 0xFEFE, /* DAC does not have Pin Name in RM */
 
+    // SPI pins
+    MOSI = PTA16,
+    MISO = PTA17,
+    SCLK = PTA15,
+    SSEL = PTA14,
+    // External interrupt from SPI Slave
+    SPI_EXT_INT = PTA10,
+    
+    // Controling nordic BLE module
+    NRF_NRESET = PTE24,
+
     // Not connected
     NC = (int)0xFFFFFFFF,
 
