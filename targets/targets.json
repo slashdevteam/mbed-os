@@ -2859,5 +2859,10 @@
         "release_versions": ["2", "5"],
         "OUTPUT_EXT": "hex",
         "device_name": "MK24FN1M0xxx12"
+    },
+    "WUNDERBAR_APP_BIN": {
+        "inherits": ["WUNDERBAR"],
+        "OUTPUT_EXT": "bin",
+        "bootloader_supported": true
     }
 }
