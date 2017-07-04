@@ -63,6 +63,14 @@ __heap_size__ = 0x10000;
   #define MBED_APP_SIZE 0x00100000
 #endif
 
+#if !defined(FLASH_STORAGE_SECTORS)
+  #define FLASH_STORAGE_SECTORS 3
+#endif
+
+#if !defined(FLASH_SECTOR_SIZE)
+  #define FLASH_SECTOR_SIZE 0x1000
+#endif
+
 HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x0400;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0400;
 M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x0400 : 0x0;
@@ -211,9 +219,16 @@ SECTIONS
     __data_end__ = .;        /* define a global symbol at data end */
   } > m_data
 
+  flash_size = (FLASH_SECTOR_SIZE * FLASH_STORAGE_SECTORS);
   __DATA_END = __DATA_ROM + (__data_end__ - __data_start__);
   text_end = ORIGIN(m_text) + LENGTH(m_text);
-  ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
+  ASSERT(flash_size <= (text_end - __etext), "region m_text overflowed with flash storage")
+  /* By default flash storage is at the end of flash memory */
+#if !defined(__flash_storage)
+  PROVIDE(__flash_storage = (text_end - flash_size));
+#endif
+  ASSERT(__DATA_END <= __flash_storage, "region m_text overflowed with text and data")
+
 
   USB_RAM_GAP = DEFINED(__usb_ram_size__) ? __usb_ram_size__ : 0x800;
   /* Uninitialized data section */
