@@ -111,20 +111,12 @@
 
 #ifndef INITIAL_SP
 #define INITIAL_SP              (0x20030000UL)
+#endif
 
 #elif defined(TARGET_WUNDERBAR)
 
 #ifndef INITIAL_SP
 #define INITIAL_SP              (0x20030000UL)
-#endif
-#ifndef OS_TASKCNT
-#define OS_TASKCNT              14
-#endif
-#ifndef OS_MAINSTKSIZE
-#define OS_MAINSTKSIZE          1024
-#endif
-#ifndef OS_CLOCK
-#define OS_CLOCK                120000000
 #endif
 
 #endif

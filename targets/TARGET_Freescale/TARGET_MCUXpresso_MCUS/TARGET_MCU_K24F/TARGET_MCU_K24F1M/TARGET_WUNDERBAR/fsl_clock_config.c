@@ -238,27 +238,3 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetSimConfig(&g_defaultClockConfigRun.simConfig);
     SystemCoreClock = g_defaultClockConfigRun.coreClock;
 }
-
-// void BOARD_BootClockHSRUN(void)
-// {
-//     SMC_SetPowerModeProtection(SMC, kSMC_AllowPowerModeAll);
-//     SMC_SetPowerModeHsrun(SMC);
-//     while (SMC_GetPowerModeState(SMC) != kSMC_PowerStateHsrun)
-//     {
-//     }
-
-//     CLOCK_SetSimSafeDivs();
-
-//     CLOCK_InitOsc0(&g_defaultClockConfigHsrun.oscConfig);
-//     CLOCK_SetXtal0Freq(BOARD_XTAL0_CLK_HZ);
-
-//     CLOCK_BootToPeeMode(g_defaultClockConfigHsrun.mcgConfig.oscsel, kMCG_PllClkSelPll0,
-//                         &g_defaultClockConfigHsrun.mcgConfig.pll0Config);
-
-//     CLOCK_SetInternalRefClkConfig(g_defaultClockConfigHsrun.mcgConfig.irclkEnableMode,
-//                                   g_defaultClockConfigHsrun.mcgConfig.ircs, g_defaultClockConfigHsrun.mcgConfig.fcrdiv);
-
-//     CLOCK_SetSimConfig(&g_defaultClockConfigHsrun.simConfig);
-
-//     SystemCoreClock = g_defaultClockConfigHsrun.coreClock;
-// }
