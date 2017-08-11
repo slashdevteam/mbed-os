@@ -40,24 +40,13 @@ void NMI_Handler(void)
     gpio_init_in(&gpio, PTA4);
 }
 
-void resetWifi()
+void getCpuId(uint32_t* part0,
+              uint32_t* part1,
+              uint32_t* part2,
+              uint32_t* part3)
 {
-    {
-        gpio_t gsPD;
-        gpio_init_in(&gsPD, PTD5);
-        while(!gpio_read(&gsPD))
-        {};
-    }
-
-    {
-        gpio_t gsPD;
-        gpio_init_out(&gsPD, PTD5);
-        gpio_write(&gsPD, 0);
-    }
-
-    {
-        gpio_t gsPD;
-        gpio_init_in(&gsPD, PTD5);
-        wait(.3);
-    }
+    *part0 = SIM->UIDH;
+    *part1 = SIM->UIDMH;
+    *part2 = SIM->UIDML;
+    *part3 = SIM->UIDL;
 }

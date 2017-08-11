@@ -214,10 +214,10 @@ typedef enum {
     SSEL = PTA14,
     // External interrupt from SPI Slave
     SPI_EXT_INT = PTA10,
-    
+    NRF_MCU_GP2 = PTA13,
     // Controling nordic BLE module
     NRF_NRESET = PTE24,
-
+    NRF_SWCLK = PTC1,
     // Not connected
     NC = (int)0xFFFFFFFF,
 

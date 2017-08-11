@@ -1445,8 +1445,22 @@ void operator delete[](void *ptr)
     free(ptr);
 }
 
-#endif
+// as per https://isocpp.org/files/papers/n3778.html
+// sized deallocation is doing the same as old delete/[]
+void operator delete(void* ptr, std::size_t)
+{
+    if (ptr != NULL) {
+        free(ptr);
+    }
+}
 
+void operator delete [](void* ptr, std::size_t)
+{
+    if (ptr != NULL) {
+        free(ptr);
+    }
+}
+#endif
 /* @brief   standard c library clock() function.
  *
  * This function returns the number of clock ticks elapsed since the start of the program.

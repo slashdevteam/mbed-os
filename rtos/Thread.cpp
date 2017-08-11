@@ -127,7 +127,9 @@ osStatus Thread::terminate() {
     osThreadId_t local_id = _tid;
     _join_sem.release();
     _tid = (osThreadId_t)NULL;
-    if (!_finished) {
+    // local_id must be != 0 to attempt termination
+    // if local_id == 0 Thread was not started in first place!
+    if (!_finished && local_id != 0) {
         _finished = true;
         // if local_id == 0 Thread was not started in first place
         // and does not have to be terminated
