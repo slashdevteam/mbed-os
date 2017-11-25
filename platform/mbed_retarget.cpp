@@ -1056,6 +1056,20 @@ void operator delete[](void *ptr)
     }
 }
 
+void operator delete(void* ptr, std::size_t)
+{
+    if (ptr != NULL) {
+        free(ptr);
+    }
+}
+
+void operator delete [](void* ptr, std::size_t)
+{
+    if (ptr != NULL) {
+        free(ptr);
+    }
+}
+
 /* @brief   standard c library clock() function.
  *
  * This function returns the number of clock ticks elapsed since the start of the program.
