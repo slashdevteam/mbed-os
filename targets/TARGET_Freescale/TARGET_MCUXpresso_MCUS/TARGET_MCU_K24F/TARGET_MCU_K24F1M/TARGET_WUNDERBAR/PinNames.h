@@ -218,6 +218,12 @@ typedef enum {
     // Controling nordic BLE module
     NRF_NRESET = PTE24,
     NRF_SWCLK = PTC1,
+    BT1_NRESET = PTC13,
+    BT2_NRESET = PTC8,
+    BT3_NRESET = PTC4,
+    BT4_NRESET = PTB8,
+    BT5_NRESET = PTB13,
+    BT6_NRESET = PTB12,
     // Not connected
     NC = (int)0xFFFFFFFF,
 
