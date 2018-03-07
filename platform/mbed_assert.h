@@ -57,7 +57,16 @@ void mbed_assert_internal(const char *expr, const char *file, int line);
  *  @endcode
  */
 #ifdef NDEBUG
+
+#ifndef __cplusplus
 #define MBED_ASSERT(expr) ((void)0)
+#else
+template <typename T>
+void UNUSED(T &&)
+{
+}
+#define MBED_ASSERT(expr) UNUSED(expr)
+#endif
 
 #else
 #define MBED_ASSERT(expr)                                \

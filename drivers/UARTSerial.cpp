@@ -309,7 +309,7 @@ void UARTSerial::tx_irq(void)
     /* Write to the peripheral if there is something to write
      * and if the peripheral is available to write. */
     while (!_txbuf.empty() && SerialBase::writeable()) {
-        char data;
+        char data = '\0';
         _txbuf.pop(data);
         SerialBase::_base_putc(data);
     }

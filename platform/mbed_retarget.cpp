@@ -481,12 +481,12 @@ extern "C" int PREFIX(_close)(FILEHANDLE fh) {
 
 extern "C" int close(int fh) {
     FileHandle* fhc = get_fhc(fh);
-    filehandles[fh] = NULL;
-    if (fhc == NULL) {
+
+    if ((fhc == NULL) || (fh >= OPEN_MAX)) {
         errno = EBADF;
         return -1;
     }
-
+    filehandles[fh] = NULL;
     int err = fhc->close();
     if (err < 0) {
         errno = -err;
@@ -1323,7 +1323,7 @@ extern "C" void __cxa_guard_abort(int *guard_object_p)
 // not the caller of "new" or "delete".
 extern "C" void* malloc_wrapper(size_t size, const void* caller);
 extern "C" void free_wrapper(void *ptr, const void* caller);
-    
+
 void *operator new(std::size_t count)
 {
     void *buffer = malloc_wrapper(count, MBED_CALLER_ADDR());
