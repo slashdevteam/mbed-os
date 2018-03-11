@@ -1472,7 +1472,12 @@ status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t leng
     uint32_t remainingBytes;
     status_t returnCode;
 
-    flash_get_matched_operation_info(config, start, &flashOperationInfo);
+    returnCode = flash_get_matched_operation_info(config, start, &flashOperationInfo);
+
+    if(returnCode)
+    {
+        return returnCode;
+    }
 
     returnCode = flash_check_range(config, start, lengthInBytes, flashOperationInfo.sectionCmdAddressAligment);
     if (returnCode)
