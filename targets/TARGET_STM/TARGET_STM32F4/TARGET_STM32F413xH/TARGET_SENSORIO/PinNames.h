@@ -252,10 +252,13 @@ typedef enum {
     STDIO_UART_RX = PD_9,
 #endif
 
-    // Generic signals namings
-    LED1        = PB_0,  // Green
-    LED2        = PB_7,  // Blue
-    LED3        = PB_14, // Red
+    // Generic signals names
+    RGB_RED     = PF_3,
+    RGB_GREEN   = PF_4,
+    RGB_BLUE    = PF_5,
+    LED1        = RGB_GREEN, // Green
+    LED2        = RGB_BLUE,  // Blue
+    LED3        = RGB_RED,   // Red
     LED4        = LED1,
     LED_RED     = LED3,
     USER_BUTTON = PC_13,
