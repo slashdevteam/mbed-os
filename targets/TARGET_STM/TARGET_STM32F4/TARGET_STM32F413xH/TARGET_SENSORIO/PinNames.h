@@ -211,36 +211,149 @@ typedef enum {
     PH_0        = 0x70,
     PH_1        = 0x71,
 
-    // ADC internal channels
+    /**** ADC internal channels ****/
     ADC_TEMP    = 0xF0,
     ADC_VREF    = 0xF1,
     ADC_VBAT    = 0xF2,
 
-    // Arduino connector namings
-    A0          = PA_3,
+    /**** Arduino connector names ****/
+    A0          = PC_0,
     A1          = PC_0,
-    A2          = PC_3,
-    A3          = PC_1,
-    A4          = PC_4,
-    A5          = PC_5,
-    D0          = PG_9,
-    D1          = PG_14,
-    D2          = PF_15,
-    D3          = PE_13,
-    D4          = PF_14,
-    D5          = PE_11,
-    D6          = PE_9,
-    D7          = PF_13,
+    A2          = PC_0,
+    A3          = PC_0,
+    A4          = PB_4,  // I2C3_SDA
+    A5          = PA_8,  // I2C3_SCL
+    D0          = PA_1,
+    D1          = PA_0,
+    D2          = PF_9,
+    D3          = PA_2,
+    D4          = PF_10,
+    D5          = PA_3,
+    D6          = PB_10,
+    D7          = PF_11,
     D8          = PF_12,
-    D9          = PD_15,
-    D10         = PD_14,
-    D11         = PA_7,
-    D12         = PA_6,
-    D13         = PA_5,
-    D14         = PB_9,
-    D15         = PB_8,
+    D9          = PB_11, // TIM2_CH4
+    D10         = PA_11, // SPI2_CS
+    D11         = PA_10, // SPI2_MOSI
+    D12         = PA_12, // SPI2_MISO
+    D13         = PA_9,  // SPI2_CLK
+    D14         = A4,
+    D15         = A5,
 
-    // STDIO for console print
+    /**** Arduino analog multiplexer
+        ARD_MUX_A   ARD_MUX_B   ARD_MUX_C   Mode
+            0           0           0       A0
+            0           0           1       A1
+            0           1           0       A2
+            0           1           1       A3
+            1           0           0       A4*
+            1           0           1       A5*
+            1           1           0       CALIB_HIGH**
+            1           1           1       CALIB_LOW**
+
+        * Pins A4 and A5 are internally connected to D14 and D15
+          in some shields, therefore, remember to configure D14 (PB4) and D15 (PA8)
+          in high impedance mode (set as INPUT) to use these analog inputs
+
+        ** MUX values 6 and 7 can be used to calibrate the Analog Inputs
+           to the Max and Min values respectively.
+    ****/
+    ARD_MUX_A   = PG_6,
+    ARD_MUX_B   = PG_7,
+    ARD_MUX_C   = PG_8,
+
+    /**** Grove I2C (IC2_FMP1) ****/
+    GROVE_SCL   = PF_14,
+    GROVE_SDA   = PF_15,
+
+    /**** Grove 1 connector names ****/
+    GROVE1_TX       = PE_1,  // UART 8 TX
+    GROVE1_RX       = PE_0,  // UART 8 RX
+    GROVE1_P1_PWM   = PD_14, // TIM4_CH3
+    GROVE1_P2_PWM   = PD_15, // TIM4_CH4
+    GROVE1_AI1      = PC_3,
+    GROVE1_AI2      = PC_4,  // ADC1_IN14
+
+    /**** Grove 1 multiplexer pins
+        GROVE1_MUX_A    GROVE1_MUX_B    Mode
+            0               0           PWM
+            1               1           UART
+            1               0           I2C
+            1               1           ANALOG_IN
+    ****/
+    GROVE1_MUX_A    = PD_10,
+    GROVE1_MUX_B    = PD_11,
+
+    /**** Grove 1 3V3/5V switch pin
+        GROVE1_SW_5V    VCC
+            0           3.3V (default)
+            1           5V
+    ****/
+    GROVE1_SW_5V = PG_9,
+
+    /**** Grove 2 connector names ****/
+    GROVE2_TX       = PG_1,  // UART 9 TX
+    GROVE2_RX       = PG_0,  // UART 9 RX
+    GROVE2_P1_PWM   = PD_12, // TIM4_CH1
+    GROVE2_P2_PWM   = PD_13, // TIM4_CH2
+    GROVE2_AI1      = PB_0,
+    GROVE2_AI2      = PC_5,  // ADC1_IN15
+
+    /**** Grove 2 multiplexer pins
+        GROVE2_MUX_A    GROVE2_MUX_B    Mode
+            0               0           PWM
+            1               1           UART
+            1               0           I2C
+            1               1           ANALOG_IN
+    ****/
+    GROVE2_MUX_A    = PG_4,
+    GROVE2_MUX_B    = PG_5,
+
+    /**** Grove 1 3V3/5V switch pin
+        GROVE1_SW_5V    VCC
+            0           3.3V (default)
+            1           5V
+    ****/
+    GROVE2_SW_5V = PG_10,
+
+    /**** mikroBUS I2C (I2C1) ****/
+    MB_I2C_SCL  = PF_14,
+    MB_I2C_SDA  = PF_15,
+
+    /**** mikroBUS SPI (SPI5) ****/
+    MB_SPI_MOSI = PE_14,
+    MB_SPI_MISO = PE_13,
+    MB_SPI_CLK  = PE_12,
+
+    /**** mikroBUS 1 connector names ****/
+    MB1_AN      = PC_1,
+    MB1_RST     = PG_14,
+    MB1_CS      = PB_1,
+    MB1_CLK     = MB_SPI_CLK,
+    MB1_MISO    = MB_SPI_MISO,
+    MB1_MOSI    = MB_SPI_MOSI,
+    MB1_PWM     = PB_14,       // TIM12_CH1
+    MB1_INT     = PD_0,
+    MB1_RX      = PF_6,        // UART 7 RX
+    MB1_TX      = PF_7,        // UART 7 TX
+    MB1_SCL     = MB_I2C_SCL,
+    MB1_SDA     = MB_I2C_SDA,
+
+    /**** mikroBUS 2 connector names ****/
+    MB2_AN      = PC_2,
+    MB2_RST     = PG_15,
+    MB2_CS      = PE_11,
+    MB2_CLK     = MB_SPI_CLK,
+    MB2_MISO    = MB_SPI_MISO,
+    MB2_MOSI    = MB_SPI_MOSI,
+    MB2_PWM     = PB_15,       // TIM12_CH2
+    MB2_INT     = PC_6,
+    MB2_RX      = PB_12,       // UART 5 RX
+    MB2_TX      = PB_13,       // UART 5 TX
+    MB2_SCL     = MB_I2C_SCL,
+    MB2_SDA     = MB_I2C_SDA,
+
+    /**** STDIO for console print ****/
 #ifdef MBED_CONF_TARGET_STDIO_UART_TX
     STDIO_UART_TX = MBED_CONF_TARGET_STDIO_UART_TX,
 #else
@@ -252,82 +365,100 @@ typedef enum {
     STDIO_UART_RX = PD_9,
 #endif
 
-    // Generic signals names
-    RGB_RED     = PF_3,
-    RGB_GREEN   = PF_4,
-    RGB_BLUE    = PF_5,
+    /**** Generic signals names ****/
+    RGB_RED     = PF_3,      // TIM5_CH1
+    RGB_GREEN   = PF_4,      // TIM5_CH2
+    RGB_BLUE    = PF_5,      // TIM5_CH3
     LED1        = RGB_GREEN, // Green
     LED2        = RGB_BLUE,  // Blue
     LED3        = RGB_RED,   // Red
     LED4        = LED1,
     LED_RED     = LED3,
     USER_BUTTON = PC_13,
-    // Standardized button names
-    BUTTON1 = USER_BUTTON,
+    BUTTON1     = USER_BUTTON,
+
+    /**** STDIO names ****/
     SERIAL_TX   = STDIO_UART_TX,
     SERIAL_RX   = STDIO_UART_RX,
     USBTX       = STDIO_UART_TX,
     USBRX       = STDIO_UART_RX,
-    I2C_SCL     = D15,
-    I2C_SDA     = D14,
-    SPI_MOSI    = D11,
-    SPI_MISO    = D12,
-    SPI_SCK     = D13,
-    SPI_CS      = D10,
-    PWM_OUT     = D9,
 
-    /**** USB pins ****/
-    USB_OTG_FS_DM = PA_11,
-    USB_OTG_FS_DP = PA_12,
-    USB_OTG_FS_ID = PA_10,
-    USB_OTG_FS_SOF = PA_8,
-    USB_OTG_FS_VBUS = PA_9,
+    /**** Common buses ****/
+    I2C_SCL     = D15, // I2C3_SCL
+    I2C_SDA     = D14, // I2C3_SDA
+    SPI_MOSI    = D11, // SPI2_MOSI
+    SPI_MISO    = D12, // SPI2_MISO
+    SPI_SCK     = D13, // SPI2_CLK
+    SPI_CS      = D10, // SPI2_CS
+    PWM_OUT     = D9,  // TIM2_CH4
 
     /**** OSCILLATOR pins ****/
-    RCC_OSC32_IN = PC_14,
+    RCC_OSC32_IN  = PC_14,
     RCC_OSC32_OUT = PC_15,
-    RCC_OSC_IN = PH_0,
-    RCC_OSC_OUT = PH_1,
+    RCC_OSC_IN    = PH_0,
+    RCC_OSC_OUT   = PH_1,
 
     /**** DEBUG pins ****/
-    SYS_JTCK_SWCLK = PA_14,
-    SYS_JTDI = PA_15,
-    SYS_JTDO_SWO = PB_3,
-    SYS_JTMS_SWDIO = PA_13,
-    SYS_JTRST = PB_4,
-    SYS_TRACECLK = PE_2,
-    SYS_TRACED0 = PE_3,
+    SYS_JTCK_SWCLK   = PA_14,
+    SYS_JTDI         = PA_15,
+    SYS_JTDO_SWO     = PB_3,
+    SYS_JTMS_SWDIO   = PA_13,
+    SYS_JTRST        = PB_4,
+    SYS_TRACECLK     = PE_2,
+    SYS_TRACED0      = PE_3,
     SYS_TRACED0_ALT0 = PF_6,
-    SYS_TRACED1 = PE_4,
+    SYS_TRACED1      = PE_4,
     SYS_TRACED1_ALT0 = PF_7,
     SYS_TRACED1_ALT1 = PD_3,
-    SYS_TRACED2 = PE_5,
+    SYS_TRACED2      = PE_5,
     SYS_TRACED2_ALT0 = PG_13,
-    SYS_TRACED3 = PE_6,
+    SYS_TRACED3      = PE_6,
     SYS_TRACED3_ALT0 = PG_14,
-    SYS_WKUP1 = PA_0,
-    SYS_WKUP2 = PC_0,
-    SYS_WKUP3 = PC_1,
+    SYS_WKUP1        = PA_0,
+    SYS_WKUP2        = PC_0,
+    SYS_WKUP3        = PC_1,
 
-    /**** QSPI pins ****/
-    QSPI1_IO0 = PD_11,
-    QSPI1_IO1 = PD_12,
-    QSPI1_IO2 = PE_2,
-    QSPI1_IO3 = PD_13,
-    QSPI1_SCK = PB_2,
-    QSPI1_CSN = PB_6,
-
-    /**** WiFi pins ****/
-    CC_SPI_CS = PA_4,
-    CC_SPI_CLK = PA_5,
+    /**** WiFi pins (SPI1) ****/
+    CC_SPI_CS   = PA_4,
+    CC_SPI_CLK  = PA_5,
     CC_SPI_MISO = PA_6,
     CC_SPI_MOSI = PA_7,
-    CC_NRESET = PE_8,
-    CC_IRQ = PE_9,
-    CC_RESTORE = PE_10,
+    CC_NRESET   = PE_8,
+    CC_IRQ      = PE_9,
+    CC_RESTORE  = PE_10,
 
+    /**** SDIO pins for uSD card ****/
+    uSD_CMD = PD_2,
+    uSD_CLK = PC_12,
+    uSD_D0  = PC_8,
+    uSD_D1  = PC_9,
+    uSD_D2  = PC_10,
+    uSD_D3  = PC_11,
+    uSD_CD  = uSD_D3,
 
-    // Not connected
+    /**** Onboard sensors I2C (I2C2) ****/
+    SENSORS_SDA = PF_0,
+    SENSORS_SCL = PF_1,
+
+    /**** OLED pins (SPI4) ****/
+    OLED_CLK   = PE_2,
+    OLED_RESET = PE_3,
+    OLED_CS    = PE_4,
+    OLED_DC    = PE_5,
+    OLED_MOSI  = PE_6,
+
+    /**** Relay pins ****/
+    RELAY_1 = PG_2,
+    RELAY_2 = PG_3,
+
+    /**** Light sensor (LTR303) interrupt pin ****/
+    LTR303_INT = PG_13,
+
+    /**** Accelerometer (BMA253) interrupt pins ****/
+    ACCEL_INT1  = PD_4,
+    ACCEL_INT2  = PD_5,
+
+    /**** Not connected ****/
     NC = (int)0xFFFFFFFF
 } PinName;
 
