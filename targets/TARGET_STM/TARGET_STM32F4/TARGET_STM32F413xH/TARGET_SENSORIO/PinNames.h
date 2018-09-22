@@ -314,6 +314,16 @@ typedef enum {
     QSPI1_SCK = PB_2,
     QSPI1_CSN = PB_6,
 
+    /**** WiFi pins ****/
+    CC_SPI_CS = PA_4,
+    CC_SPI_CLK = PA_5,
+    CC_SPI_MISO = PA_6,
+    CC_SPI_MOSI = PA_7,
+    CC_NRESET = PE_8,
+    CC_IRQ = PE_9,
+    CC_RESTORE = PE_10,
+
+
     // Not connected
     NC = (int)0xFFFFFFFF
 } PinName;
