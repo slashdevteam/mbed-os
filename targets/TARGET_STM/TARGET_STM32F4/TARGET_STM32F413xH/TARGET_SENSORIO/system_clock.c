@@ -17,8 +17,8 @@
 /**
   * This file configures the system clock as follows:
   *-----------------------------------------------------------------------------
-  * System clock source | 1- USE_PLL_HSE_EXTC (external 8 MHz clock)
-  *                     | 2- USE_PLL_HSE_XTAL (external 8 MHz xtal)
+  * System clock source | 1- USE_PLL_HSE_EXTC (external 16 MHz clock)
+  *                     | 2- USE_PLL_HSE_XTAL (external 16 MHz xtal)
   *                     | 3- USE_PLL_HSI (internal 16 MHz)
   *-----------------------------------------------------------------------------
   * SYSCLK(MHz)         | 100
@@ -158,18 +158,18 @@ uint8_t SetSysClock_PLL_HSE(uint8_t bypass)
     /* Enable HSE oscillator and activate PLL with HSE as source */
     RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_HSE;
     if (bypass == 0) {
-        RCC_OscInitStruct.HSEState          = RCC_HSE_ON; /* External 8 MHz xtal on OSC_IN/OSC_OUT */
+        RCC_OscInitStruct.HSEState          = RCC_HSE_ON; /* External 16 MHz xtal on OSC_IN/OSC_OUT */
     } else {
-        RCC_OscInitStruct.HSEState          = RCC_HSE_BYPASS; /* External 8 MHz clock on OSC_IN */
+        RCC_OscInitStruct.HSEState          = RCC_HSE_BYPASS; /* External 16 MHz clock on OSC_IN */
     }
 
     RCC_OscInitStruct.PLL.PLLState        = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource       = RCC_PLLSOURCE_HSE;
 
-    RCC_OscInitStruct.PLL.PLLM            = 8;             // VCO input clock = 1 MHz (8 MHz / 8)
+    RCC_OscInitStruct.PLL.PLLM            = 16;            // VCO input clock = 1 MHz (16 MHz / 16)
     RCC_OscInitStruct.PLL.PLLN            = 200;           // VCO output clock = 200 MHz (1 MHz * 200)
     RCC_OscInitStruct.PLL.PLLP            = RCC_PLLP_DIV2; // PLLCLK = 100 MHz (200 MHz / 2)
-    RCC_OscInitStruct.PLL.PLLQ            = 7;
+    RCC_OscInitStruct.PLL.PLLQ            = 4;
     RCC_OscInitStruct.PLL.PLLR            = 2;
 
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
@@ -177,13 +177,19 @@ uint8_t SetSysClock_PLL_HSE(uint8_t bypass)
     }
 
     /* Select PLLSAI output as USB clock source */
-    PeriphClkInitStruct.PLLI2S.PLLI2SM = 8;
-    PeriphClkInitStruct.PLLI2S.PLLI2SQ = 4;
+    PeriphClkInitStruct.PLLI2S.PLLI2SM = 16;
+    PeriphClkInitStruct.PLLI2S.PLLI2SQ = 2;
+    PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
     PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CLK48;
-    PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48CLKSOURCE_PLLI2SQ;
+    PeriphClkInitStruct.PeriphClockSelection  = RCC_PERIPHCLK_CLK48 | RCC_PERIPHCLK_SDIO | RCC_PERIPHCLK_FMPI2C1;
+    PeriphClkInitStruct.Clk48ClockSelection   = RCC_CLK48CLKSOURCE_PLLQ;
+    PeriphClkInitStruct.SdioClockSelection    = RCC_SDIOCLKSOURCE_CLK48;
+    PeriphClkInitStruct.Fmpi2c1ClockSelection = RCC_FMPI2C1CLKSOURCE_APB;
 
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+        return 0; // FAIL
+    }
 
     /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 clocks dividers */
     RCC_ClkInitStruct.ClockType      = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
@@ -198,9 +204,9 @@ uint8_t SetSysClock_PLL_HSE(uint8_t bypass)
 
     /* Output clock on MCO1 pin(PA8) for debugging purpose */
     //if (bypass == 0)
-    //  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_2); // 4 MHz with xtal
+    //  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_2); // 8 MHz with xtal
     //else
-    //  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1); // 8 MHz with external clock
+    //  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1); // 16 MHz with external clock
 
     return 1; // OK
 }
