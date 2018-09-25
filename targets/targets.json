@@ -4502,8 +4502,9 @@
                 "macro_name": "CLOCK_SOURCE"
             }
         },
+        "OUTPUT_EXT": "hex",
         "detect_code": ["0746"],
-        "macros_add": ["USB_STM_HAL", "USBHOST_OTHER"],
+        "macros_add": ["USB_STM_HAL", "USBHOST_OTHER", "HSE_VALUE=16000000"],
         "device_has_add": ["ANALOGOUT", "CAN", "LOWPOWERTIMER", "SERIAL_ASYNCH", "SERIAL_FC", "TRNG", "FLASH", "STORAGE"],
         "features": ["STORAGE"],
         "release_versions": ["5"],
