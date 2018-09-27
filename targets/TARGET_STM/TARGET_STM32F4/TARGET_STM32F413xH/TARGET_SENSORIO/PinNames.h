@@ -262,6 +262,8 @@ typedef enum {
     ARD_MUX_B   = PG_7,
     ARD_MUX_C   = PG_8,
 
+    ARD_ANALOG_IN = PC_0,
+
     /**** Grove I2C (IC2_FMP1) ****/
     GROVE_SCL   = PF_14,
     GROVE_SDA   = PF_15,
