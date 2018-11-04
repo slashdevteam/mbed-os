@@ -258,9 +258,9 @@ typedef enum {
         ** MUX values 6 and 7 can be used to calibrate the Analog Inputs
            to the Max and Min values respectively.
     ****/
-    ARD_MUX_A   = PG_6,
+    ARD_MUX_A   = PG_8,
     ARD_MUX_B   = PG_7,
-    ARD_MUX_C   = PG_8,
+    ARD_MUX_C   = PG_6,
 
     ARD_ANALOG_IN = PC_0,
 
@@ -457,8 +457,8 @@ typedef enum {
     LTR303_INT = PG_13,
 
     /**** Accelerometer (BMA253) interrupt pins ****/
-    ACCEL_INT1  = PD_4,
-    ACCEL_INT2  = PD_5,
+    ACCEL_INT1  = PD_5,
+    ACCEL_INT2  = PD_4,
 
     /**** Not connected ****/
     NC = (int)0xFFFFFFFF
